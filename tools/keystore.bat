@@ -1,0 +1,1 @@
+keytool -genkey -alias android.keystore -keyalg RSA -validity 20000 -keystore neo.keystore
