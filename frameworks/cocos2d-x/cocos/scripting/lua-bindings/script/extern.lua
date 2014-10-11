@@ -16,6 +16,25 @@ function clone(object)
     return _copy(object)
 end
 
+local function isTypeOf(self, superClass)
+    local sn = superClass.__cname
+    local cn = self.__cname
+
+    if sn ~= nil and cn ~= nil then
+        if sn == cn then
+            return true
+        else
+            local sc = self.super
+
+            if sc ~= nil then
+                return isTypeOf(self.super, superClass)
+            end
+        end
+    end
+
+    return false
+end
+
 --Create an class.
 function class(classname, super)
     local superType = type(super)
@@ -48,6 +67,7 @@ function class(classname, super)
             -- copy fields from class to native object
             for k,v in pairs(cls) do instance[k] = v end
             instance.class = cls
+            instance.isTypeOf = isTypeOf
             instance:ctor(...)
             return instance
         end
@@ -68,6 +88,7 @@ function class(classname, super)
         function cls.new(...)
             local instance = setmetatable({}, cls)
             instance.class = cls
+            instance.isTypeOf = isTypeOf
             instance:ctor(...)
             return instance
         end

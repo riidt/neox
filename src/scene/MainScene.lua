@@ -1,10 +1,5 @@
 cclog("hello2 file loaded")
 
-
-function isTypeOf(instance, superClass)
-    return false
-end
-
 local sceneGame = cc.Scene:create()
 
 cclog("hello2 create panel")
@@ -33,7 +28,26 @@ sceneGame:addChild(panel)
 
 local rs = cc.Director:getInstance():getRunningScene()
 
-cclog("object [%s] is [%s]:%s", rs, "IScene", isTypeOf(rs, IScene))
+------------------------------------------------------------------
+--
+
+C1 = class("C1", IScene)
+C2 = class("C2", C1)
+
+local c1 = C1.new()
+local c2 = C2.new()
+local s = cc.Scene:create()
+
+cclog("object [%s] is [%s]:%s", "c1", "cc.Scene", c1:isTypeOf(cc.Scene))
+cclog("object [%s] is [%s]:%s", "c1", "IScene", c1:isTypeOf(IScene))
+cclog("object [%s] is [%s]:%s", "c1", "C1", c1:isTypeOf(C1))
+cclog("object [%s] is [%s]:%s", "c2", "IScene", c2:isTypeOf(IScene))
+cclog("object [%s] is [%s]:%s", "c2", "C1", c2:isTypeOf(C1))
+cclog("object [%s] is [%s]:%s", "c2", "C2", c2:isTypeOf(C2))
+cclog("object [%s] is [%s]:%s", "c1", "C2", c1:isTypeOf(C2))
+--
+------------------------------------------------------------------
+
 
 if rs ~= nil then
     cc.Director:getInstance():replaceScene(sceneGame)
@@ -60,6 +74,6 @@ local function dataLoaded2(percent)
 end
 
 
---ccs.ArmatureDataManager:getInstance():addArmatureFileInfoAsync("DragonBones_Tutorial_MultiBehavior.png", "DragonBones_Tutorial_MultiBehavior.plist", "DragonBones_Tutorial_MultiBehavior.xml", dataLoaded2)
+ccs.ArmatureDataManager:getInstance():addArmatureFileInfoAsync("DragonBones_Tutorial_MultiBehavior.png", "DragonBones_Tutorial_MultiBehavior.plist", "DragonBones_Tutorial_MultiBehavior.xml", dataLoaded2)
 
 cclog("scene/MainScene")
