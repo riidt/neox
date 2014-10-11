@@ -1,4 +1,4 @@
-local UpdateScene = class("UpdateScene", IScene)
+UpdateScene = class("UpdateScene", IScene)
 
 function UpdateScene:ctor()
     cclog("update scene ctor.")
@@ -17,7 +17,6 @@ function UpdateScene:ctor()
 end
 
 function UpdateScene:onEnter()
-    IScene.onEnter(self)
     cclog("update scene enter.")
     
     local visibleSize = cc.Director:getInstance():getVisibleSize()
@@ -38,6 +37,17 @@ function UpdateScene:onEnter()
     self:addChild(progress)
     self.progress = progress
     
+    
+    
+    local targetPlatform = cc.Application:getInstance():getTargetPlatform()
+    if targetPlatform == cc.PLATFORM_OS_WINDOWS then
+        performWithDelay(self,function() self:startGame() end,.1)
+    else
+        self:requestUpdateInfo()
+    end
+end
+
+function UpdateScene:requestUpdateInfo()
     local http = cc.XMLHttpRequest:new()
     local url = self.helper:getUpdateURL()
     http:open("GET", url, true)
@@ -176,10 +186,6 @@ function UpdateScene:updateFile(entity)
 end
 
 function UpdateScene:startGame()
-    self:onExit()
-    
-    cclog("start");
-
     local search = cc.FileUtils:getInstance():getSearchPaths()
     for key, var in ipairs(search) do
         cclog(string.format("%d:%s", key, var))
@@ -190,7 +196,9 @@ function UpdateScene:startGame()
         cclog(string.format("%d:%s", key, var))
     end
 
-    require("scene.MainScene")
+    require "utils.Director"
+    local ms = MainScene.new()
+    Director.replaceScene(ms)
 end
 
 function UpdateScene:loopDirector(dir, saveDir)
@@ -218,13 +226,4 @@ end
 function UpdateScene:updateProgress()
     local p = string.format("downloading... %d%% (%d/%d)", math.floor(self.taskIndex / self.totalTasks * 100), self.taskIndex, self.totalTasks)
     self.progress:setString(p)
-end
-
-local us = UpdateScene.new()
-local rs = cc.Director:getInstance():getRunningScene()
-
-if rs ~= nil then
-    cc.Director:getInstance():replaceScene(us)
-else
-    cc.Director:getInstance():runWithScene(us)
 end

@@ -5,10 +5,6 @@ IScene = class("IScene",
     end
 )
 
-function IScene:init()
-    cclog("IScene init")
-end
-
 function IScene:onEnter()
     cclog("IScene onEnter()")
 end

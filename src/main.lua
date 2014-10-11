@@ -35,11 +35,6 @@ local function main()
 	require "DeprecatedEnum"
     require "DeprecatedClass"
     require "Deprecated"
-	
-	local schedulerID = 0
-    --support debug
-    local targetPlatform = cc.Application:getInstance():getTargetPlatform()
-    
     
     local helper = neo.GameHelper:getInstance()
     helper:init()
@@ -48,11 +43,15 @@ local function main()
     helper:loadLocalVersion(_CURR_INSTALL_VERSION)
     
     require "IScene"
+    require "update"
     
-    if targetPlatform == cc.PLATFORM_OS_WINDOWS then
-        require "scene.MainScene"
+    local us = UpdateScene.new()
+    local rs = cc.Director:getInstance():getRunningScene()
+
+    if rs ~= nil then
+        cc.Director:getInstance():replaceScene(us)
     else
-        require "update"
+        cc.Director:getInstance():runWithScene(us)
     end
 end
 
