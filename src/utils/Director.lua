@@ -1,4 +1,6 @@
 require "scene.MainScene"
+require "scene.DemoScene"
+require "scene.TerisScene"
 
 Director = {}
 

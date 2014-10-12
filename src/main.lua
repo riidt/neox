@@ -40,6 +40,7 @@ local function main()
     helper:init()
     
     require "version"
+    cclog("version.lua:%s", _CURR_INSTALL_VERSION)
     helper:loadLocalVersion(_CURR_INSTALL_VERSION)
     
     require "IScene"

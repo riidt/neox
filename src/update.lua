@@ -48,6 +48,11 @@ function UpdateScene:onEnter()
 end
 
 function UpdateScene:requestUpdateInfo()
+    local lcfv = "file-version.json"
+    local fp = cc.FileUtils:getInstance():fullPathForFilename(lcfv)
+    local content = cc.FileUtils:getInstance():getStringFromFile(lcfv)
+    self.localFiles = json.decode(content)
+    
     local http = cc.XMLHttpRequest:new()
     local url = self.helper:getUpdateURL()
     http:open("GET", url, true)
@@ -57,8 +62,8 @@ function UpdateScene:requestUpdateInfo()
             self.latestConfig = http.responseText
             cclog(string.format("response:%s", self.latestConfig))
             self.files = json.decode(self.latestConfig)
-            cclog("version:current [%s], latest [%s]", self.helper:getCurrentVersion(), self.files.ver)
-            if self.helper:getCurrentVersion() < self.files.ver then
+            
+            if self.localFiles.ver < self.files.ver then
                 self:updateGame()
             else
                 self:startGame()
@@ -69,7 +74,7 @@ function UpdateScene:requestUpdateInfo()
         end
         --http:release()
     end)
-    http:send(string.format("ver=%s", _CURR_INSTALL_VERSION))
+    http:send(string.format("ver=%s", self.localFiles.ver))
 end
 
 function UpdateScene:update(dt)
@@ -132,15 +137,6 @@ end
 
 function UpdateScene:updateGame()
     cclog("update")
-
-    local lcfv = "file-version.json"
-    local fp = cc.FileUtils:getInstance():fullPathForFilename(lcfv)
-    cclog("helper versioin:%d", self.helper:getCurrentVersion())
-    cclog(fp)
-    local content = cc.FileUtils:getInstance():getStringFromFile(lcfv)
-    cclog(string.format("content:%s", content))
-    self.localFiles = json.decode(content)
-
     self:loopDirector("src")
     self:loopDirector("res")
     self.totalTasks = #self.updateList
