@@ -625,8 +625,8 @@ public:
     ConnectWaitLayer()
     {
 #include "ResData.h"
-        int designWidth = 1280;
-        int designHeight = 800;
+        int designWidth = 480;
+        int designHeight = 640;
         Director::getInstance()->getOpenGLView()->setDesignResolutionSize(designWidth,designHeight,ResolutionPolicy::EXACT_FIT);
         Image* imagebg = new Image();
         imagebg->initWithImageData(__landscapePngData, sizeof(__landscapePngData));
@@ -1084,13 +1084,13 @@ bool startRuntime()
     register_runtime_override_function(stack->getLuaState());
 
     luaopen_debugger(engine->getLuaStack()->getLuaState());
-    
+    /*
     auto scene = Scene::create();
     auto connectLayer = new ConnectWaitLayer();
     connectLayer->autorelease();
     auto director = Director::getInstance();
     scene->addChild(connectLayer);
     director->runWithScene(scene);
-
+    */
     return true;
 }

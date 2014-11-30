@@ -62,7 +62,7 @@ function UpdateScene:requestUpdateInfo()
             self.latestConfig = http.responseText
             cclog(string.format("response:%s", self.latestConfig))
             self.files = json.decode(self.latestConfig)
-            
+            cclog("local:%s, latest:%s", self.localFiles.ver, self.files.ver)
             if self.localFiles.ver < self.files.ver then
                 self:updateGame()
             else

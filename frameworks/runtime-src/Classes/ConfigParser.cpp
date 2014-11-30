@@ -99,7 +99,7 @@ void ConfigParser::readConfig()
 
 ConfigParser::ConfigParser(void):_isInit(false),_isLandscape(true)
 {
-    _initViewSize.setSize(960,640);
+    _initViewSize.setSize(480,640);
     _viewName = "Neo";
     _entryfile = "src/main.lua";
 }

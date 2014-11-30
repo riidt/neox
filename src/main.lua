@@ -21,12 +21,18 @@ function __G__TRACKBACK__(msg)
     return msg
 end
 
+local dw = 1080
+local dh = 1920
+
 local function main()
     collectgarbage("collect")
     -- avoid memory leak
     collectgarbage("setpause", 100)
     collectgarbage("setstepmul", 5000)
-    cc.Director:getInstance():getOpenGLView():setDesignResolutionSize(1080,1920, 1)
+    local win = cc.Director:getInstance():getWinSizeInPixels()
+    local sx, sy = win.width / dw, win.height / dh
+    local scale = math.max(sx, sy)
+    cc.Director:getInstance():getOpenGLView():setDesignResolutionSize(dw,dh, cc.ResolutionPolicy.SHOW_ALL)
     cc.FileUtils:getInstance():addSearchPath("src")
     cc.FileUtils:getInstance():addSearchPath("res")
 	cc.FileUtils:getInstance():addSearchResolutionsOrder("src");

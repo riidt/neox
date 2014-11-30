@@ -1,3 +1,4 @@
+require "teris.TerisGame"
 TerisScene = class("TerisScene", IScene)
 
 function TerisScene:ctor(colorNums)
@@ -10,18 +11,21 @@ function TerisScene:ctor(colorNums)
     self:addChild(menu)
     
     self:buildBackButton()
+    local view = CocosView.new(self)
+    local game = TerisGame.new(view, colorNums)
+    self.game= game
 end
 
 function TerisScene:onEnter()
-    cclog("IScene onEnter()")
+    self.game:start()
 end
 
 function TerisScene:update(dt)
-    cclog("IScene update", dt)
+    self.game:update(dt)
 end
 
 function TerisScene:onExit()
-    cclog("IScene onExit()")
+    cclog("TerisScene onExit()")
 end
 
 function TerisScene:dispose()

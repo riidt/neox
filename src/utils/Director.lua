@@ -1,14 +1,28 @@
+require "utils.NumberUtils"
+require "view.CocosView"
 require "scene.MainScene"
 require "scene.DemoScene"
 require "scene.TerisScene"
 
-Director = {}
 
+local _scene = nil
+
+local function updateScene() 
+    if _scene then
+        _scene:update(0.04)
+    end 
+end
+
+local updateSchedule = cc.Director:getInstance():getScheduler():scheduleScriptFunc(updateScene, 0.04, false)
+
+Director = {}
 Director.replaceScene = function(scene)
-    local rs = cc.Director:getInstance():getRunningScene()
+    if _scene then
+        _scene:onExit()
+    end
+    
+    _scene = scene
     
     cc.Director:getInstance():replaceScene(scene)
     scene:onEnter()
-    
-    rs:onExit()
 end
